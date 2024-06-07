@@ -1,8 +1,12 @@
 {
-  "id": "token-action-hud-ose",
-  "title": "Token Action HUD for Old-School Essentials",
+  "id": "token-action-hud-wwn",
+  "title": "Token Action HUD for Worlds Without Number",
   "description": "Token Action HUD is a repositionable HUD of actions for a selected token",
   "authors": [
+    {
+      "name": "SobranDM",
+      "url": "https://github.com/SobranDM"
+    },
     {
       "name": "Snagov",
       "url": "https://github.com/mrcomac"
@@ -16,12 +20,11 @@
     "verified": "11.307"
   },
   "esmodules": [
-    "./dist/token-action-hud-ose.min.js"
+    "./dist/token-action-hud-wwn.min.js"
   ],
-  "scripts": [
-  ],
+  "scripts": [],
   "styles": [
-    "./styles/tah-ose.css"
+    "./styles/tah-wwn.css"
   ],
   "languages": [
     {
@@ -34,7 +37,7 @@
   "relationships": {
     "systems": [
       {
-        "id": "ose",
+        "id": "wwn",
         "type": "system",
         "compatibility": [
           {
@@ -50,8 +53,8 @@
         "type": "module",
         "compatibility": [
           {
-            "minimum": "1.5.4",
-            "verified": "1.5.4"
+            "minimum": "1.3.0",
+            "verified": "1.3.0"
           }
         ]
       }
