@@ -25,3 +25,7 @@ The images in `styles/img` are inspired in the actor sheet attributes.
 ## License
 
 This software is released under the MIT.
+
+## Credit
+
+Forked from the [OSE add-on](https://foundryvtt.com/packages/token-action-hud-ose) for Token Action HUD.
