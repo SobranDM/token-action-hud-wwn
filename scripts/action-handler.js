@@ -40,6 +40,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       this.#buildTreasure('treasure', ['item'])
     }
     async #buildInventoryContainer() {
+      if (canvas.tokens.controlled.length > 1) return;
       const itemTypes = 'container'
       const parentgroupData = { id: 'inventory', type: 'custom' }
       for (const [_, container] of Object.entries(this.actor.items.filter(el => itemTypes.includes(el.type) && el.system.itemIds.length > 0))) {
@@ -83,6 +84,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      * @param {string} itemTypes
      */
     #buildWeapons(groupId, itemTypes) {
+      if (canvas.tokens.controlled.length > 1) return;
       this.#buildMeleeWeapons(groupId, itemTypes)
       this.#buildRangedWeapons(groupId, itemTypes)
     }
@@ -167,6 +169,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      * @param {string} itemTypes
      */
     #buildInventory(groupId, itemTypes) {
+      if (canvas.tokens.controlled.length > 1) return;
       const actionType = groupId
       const actions = Object.entries(
         this.actor.items.filter(
@@ -205,6 +208,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      * @param {string} itemTypes
      */
     #buildTreasure(groupId, itemTypes) {
+      if (canvas.tokens.controlled.length > 1) return;
       const actionType = groupId
       const actions = Object.entries(this.actor.items.filter(
         el => itemTypes.includes(el.type)
@@ -242,6 +246,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      * @param {string} groupId
      */
     #buildSaves(actionType, groupId) {
+      if (canvas.tokens.controlled.length > 1) return;
       const actions = Object.entries(this.actor.system.saves).map((ability) => {
         const abilityId = ability[0]
         const id = `${actionType}-${abilityId}`
@@ -265,6 +270,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     #buildAbilities(actionType, groupId) {
+      if (canvas.tokens.controlled.length > 1) return;
       const abilities = this.actor.items.filter(el => el.type == 'ability')
       const actions = []
       abilities.forEach((ability) => {
@@ -292,6 +298,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     #buildSpells() {
+      if (canvas.tokens.controlled.length > 1) return;
       const actionType = 'spell';
       if (this.actor.system.spells.enabled) {
         const spells = this.actor.items.filter(item => item.type == 'spell');
@@ -346,6 +353,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     #buildArts() {
+      if (canvas.tokens.controlled.length > 1) return;
       const actionType = 'art';
       if (this.actor.system.spells.enabled) {
         const artsList = this.actor.items.filter(item => item.type == 'art');
