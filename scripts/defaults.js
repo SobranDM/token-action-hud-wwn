@@ -73,6 +73,23 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         ]
       },
       {
+        nestId: 'arts',
+        id: 'arts',
+        name: coreModule.api.Utils.i18n('WWN.spells.Arts'),
+        groups: [
+          { ...groups._arts1, nestId: 'arts_arts-1' },
+          { ...groups._arts2, nestId: 'arts_arts-2' },
+          { ...groups._arts3, nestId: 'arts_arts-3' },
+          { ...groups._arts4, nestId: 'arts_arts-4' },
+          { ...groups._arts5, nestId: 'arts_arts-5' },
+          { ...groups._arts6, nestId: 'arts_arts-6' },
+          { ...groups._arts7, nestId: 'arts_arts-7' },
+          { ...groups._arts8, nestId: 'arts_arts-8' },
+          { ...groups._arts9, nestId: 'arts_arts-9' },
+          { ...groups._arts10, nestId: 'arts_arts-10' }
+        ]
+      },
+      {
         nestId: 'treasures',
         id: 'treasures',
         name: coreModule.api.Utils.i18n('WWN.items.Treasure'),

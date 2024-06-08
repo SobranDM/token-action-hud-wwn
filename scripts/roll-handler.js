@@ -41,9 +41,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         case 'ability':
           this.#rollAbility(event, actor, actionId)
           break;
-        case 'attribute':
-          this.#rollAttribute(event, actor, actionId)
-          break
         case 'check':
           this.#rollAbilityTest(event, actor, actionId)
           break
@@ -59,6 +56,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           break
         case 'feature':
         case 'spell':
+        case 'art':
         case 'weapon':
           if (this.isRenderItem()) this.doRenderItem(actor, actionId)
           else {
@@ -103,19 +101,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     /**
-     * Roll Attribute
-     * @private
-     * @param {object} event    The event
-     * @param {object} actor    The actor
-     * @param {string} actionId The action id
-     */
-    #rollAttribute(event, actor, actionId) {
-      if (!actor) return
-      if (!actor.system?.abilities) return
-      actor.rollCheck(actionId, { event })
-    }
-
-    /**
      * Roll Ability
      * @private
      * @param {object} event    The event
@@ -142,8 +127,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      */
     #rollAbilitySave(event, actor, actionId) {
       if (!actor) return
-      if (!actor.system?.abilities) return
-      actor.rollSave(actionId, { event })
+      actor.rollSave(actionId, { event });
     }
 
     /**
@@ -203,12 +187,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         return
       }
       if (item.type == 'spell') {
-        if (item.system.cast > 0 && consumeItem) {
-          return item.spendSpell()
+        const spellSlots = this.actor.system.spells.perDay;
+        if (spellSlots.value < spellSlots.max) {
+          return item.spendSpell();
+        } else {
+          return ui.notifications.warn("No spell slots remaining.");
         }
       } else if (item.type == 'weapon') {
-        return item.rollWeapon()
+        return item.rollWeapon();
 
+      } else if (item.type == 'art') {
+        return item.spendArt();
       } else if (item.system.quantity.value > 0 && consumeItem) {
         const newData = {
           quantity: {

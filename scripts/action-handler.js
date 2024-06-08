@@ -23,11 +23,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     */
     async #buildCharacterActions() {
       if (this.actorType === 'character') {
-        this.#buildAttributes('attribute', 'attributes')
+        // this.#buildAttributes('attribute', 'attributes')
       }
       this.#buildSaves('save', 'saves')
       this.#buildAbilities('ability', 'abilities')
       this.#buildSpells()
+      this.#buildArts()
       this.#buildItems()
     }
 
@@ -97,7 +98,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       const actions = Object.entries(
         this.actor.items.filter(
           el => itemTypes.includes(el.type)
-            && el.system.containerId == ''
+            && (el.system.containerId == '' || el.system.containerId == undefined)
             && el.system.melee)).map((item) => {
               const abilityId = item[1].id
               const id = `${actionType}-${item[1].id}`
@@ -235,39 +236,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     /**
-     * Build Attributes
-     * @private
-     * @param {string} actionType
-     * @param {string} groupId
-     */
-    #buildAttributes(actionType, groupId) {
-      let actions = []
-      const abilities = ['cha', 'con', 'dex', 'int', 'str', 'wis']
-      actions = Object.entries(abilities).map((ability) => {
-        const abilityId = ability[1]
-        const id = `${actionType}-${ability[1]}`
-        const label = coreModule.api.Utils.i18n(`WWN.scores.${abilityId}.long`)
-        const name = coreModule.api.Utils.i18n(`WWN.scores.${abilityId}.long`)
-        const listName = `${actionType}${label}`
-        const encodedValue = [actionType, abilityId].join(this.delimiter)
-        const info2 = { text: this.actor.system.scores[abilityId].value }
-        const img = '/modules/token-action-hud-wwn/styles/img/img_' + abilityId.toLocaleLowerCase() + '.png'
-        const cssClass = ''
-        return {
-          id,
-          name,
-          encodedValue,
-          info2,
-          img,
-          cssClass,
-          listName
-        }
-      })
-      const groupData = { id: groupId, type: 'system' }
-      this.addActions(actions, groupData)
-    }
-
-    /**
      * Build abilities
      * @private
      * @param {string} actionType
@@ -277,9 +245,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
       const actions = Object.entries(this.actor.system.saves).map((ability) => {
         const abilityId = ability[0]
         const id = `${actionType}-${abilityId}`
-        const label = coreModule.api.Utils.i18n(`WWN.saves.${abilityId}.long`)
-        const name = coreModule.api.Utils.i18n(`WWN.saves.${abilityId}.long`)
-        const img = '/systems/wwn/assets/back.png'
+        const label = coreModule.api.Utils.i18n(`WWN.saves.${abilityId}`)
+        const name = coreModule.api.Utils.i18n(`WWN.saves.${abilityId}`)
+        const img = '/systems/wwn/assets/default/ability.png'
         const listName = `${actionType}${label}`
         const encodedValue = [actionType, abilityId].join(this.delimiter)
         const info1 = { text: ability[1].value }
@@ -324,40 +292,104 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     }
 
     #buildSpells() {
-      const actionType = 'spell'
+      const actionType = 'spell';
       if (this.actor.system.spells.enabled) {
-        const spells = Object.entries(this.actor.system.spells.spellList)
+        const spells = this.actor.items.filter(item => item.type == 'spell');
+        if (spells.length) {
+          let sortedSpells = {};
+          for (var i = 0; i < spells.length; i++) {
+            const lvl = spells[i].system.lvl;
+            if (!sortedSpells[lvl]) sortedSpells[lvl] = [];
+            sortedSpells[lvl].push(spells[i]);
+          }
 
-        for (let i = 0; i < spells.length; i++) {
-          let level = spells[i][0]
-          if (level == 1) level = level + 'st'
-          else if (level == 2) level = level + 'nd'
-          else if (level == 3) level = level + 'rd'
-          else level = level + 'th'
+          // Sort each level
+          Object.keys(sortedSpells).forEach((level) => {
+            sortedSpells[level].sort((a, b) => a.name > b.name ? 1 : -1);
+          });
 
-          const spellLevelList = Object.entries(spells[i][1]).map((ability) => {
-            const abilityId = ability[1].id
-            const id = `${actionType}-${ability[1].id}`
-            const label = ability[1].name
-            const name = ability[1].name
-            const listName = `${actionType}${label}`
-            const encodedValue = [actionType, abilityId].join(this.delimiter)
-            const info1 = { text: "( " + ability[1].system.cast + " )" }
-            const img = ability[1].img
-            const active = ability[1].system.cast > 0 ? ' active' : ''
-            const cssClass = `toggle${active}`
-            return {
-              id,
-              name,
-              encodedValue,
-              info1,
-              img,
-              cssClass,
-              listName
-            }
-          })
-          const groupData = { id: level + '-level-spells', type: 'system' }
-          this.addActions(spellLevelList, groupData)
+          const spellList = Object.entries(sortedSpells);
+
+          for (let i = 0; i < spellList.length; i++) {
+            let level = spellList[i][0]
+            if (level == 1) level = level + 'st'
+            else if (level == 2) level = level + 'nd'
+            else if (level == 3) level = level + 'rd'
+            else level = level + 'th'
+
+            const spellLevelList = Object.entries(spellList[i][1]).map((ability) => {
+              const abilityId = ability[1].id
+              const id = `${actionType}-${ability[1].id}`
+              const label = ability[1].name
+              const name = ability[1].name
+              const listName = `${actionType}${label}`
+              const encodedValue = [actionType, abilityId].join(this.delimiter)
+              const info1 = { text: "( " + ability[1].system.cast + " )" }
+              const img = ability[1].img
+              const active = ''
+              const cssClass = `toggle${active}`
+              return {
+                id,
+                name,
+                encodedValue,
+                info1,
+                img,
+                cssClass,
+                listName
+              }
+            })
+            const groupData = { id: level + '-level-spells', type: 'system' }
+            this.addActions(spellLevelList, groupData)
+          }
+        }
+      }
+    }
+
+    #buildArts() {
+      const actionType = 'art';
+      if (this.actor.system.spells.enabled) {
+        const artsList = this.actor.items.filter(item => item.type == 'art');
+        if (artsList.length) {
+          let sortedArts = {};
+          for (var i = 0; i < artsList.length; i++) {
+            let source = artsList[i].system.source;
+            if (!sortedArts[source]) sortedArts[source] = [];
+            sortedArts[source].push(artsList[i]);
+          }
+
+          // Sort each class
+          Object.keys(sortedArts).forEach(source => {
+            sortedArts[source].sort((a, b) => a.name > b.name ? 1 : -1);
+          });
+
+          const arts = Object.entries(sortedArts);
+          for (let i = 0; i < arts.length; i++) {
+            let level = arts[i][0]
+
+            const artClassList = Object.entries(arts[i][1]).map((ability) => {
+              const abilityId = ability[1].id
+              const id = `${actionType}-${ability[1].id}`
+              const label = ability[1].name
+              const name = ability[1].name
+              const listName = `${actionType}${label}`
+              const encodedValue = [actionType, abilityId].join(this.delimiter)
+              const info1 = { text: "( " + ability[1].system.effort + " )" }
+              const img = ability[1].img
+              const active = ''
+              const cssClass = `toggle${active}`
+              return {
+                id,
+                name,
+                encodedValue,
+                info1,
+                img,
+                cssClass,
+                listName
+              }
+            })
+            const groupData = { id: `arts-${i + 1}`, type: 'system', name: level }
+            this.addActions(artClassList, groupData)
+          }
         }
       }
     }
