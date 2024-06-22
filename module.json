@@ -17,7 +17,7 @@
   "version": "This is auto replaced",
   "compatibility": {
     "minimum": "11",
-    "verified": "11.307"
+    "verified": "12"
   },
   "esmodules": [
     "./dist/token-action-hud-wwn.min.js"
@@ -41,8 +41,8 @@
         "type": "system",
         "compatibility": [
           {
-            "minimum": "1.9.3",
-            "verified": "1.9.3"
+            "minimum": "1.4.0",
+            "verified": "1.4.5"
           }
         ]
       }

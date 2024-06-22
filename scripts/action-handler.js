@@ -248,6 +248,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     #buildSaves(actionType, groupId) {
       if (canvas.tokens.controlled.length > 1) return;
       const actions = Object.entries(this.actor.system.saves).map((ability) => {
+        if (ability[0] === "baseSave") return;
         const abilityId = ability[0]
         const id = `${actionType}-${abilityId}`
         const label = coreModule.api.Utils.i18n(`WWN.saves.${abilityId}`)
@@ -264,7 +265,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
           info1,
           listName
         }
-      })
+      });
+      actions.pop();
       const groupData = { id: groupId, type: 'system' }
       this.addActions(actions, groupData)
     }
