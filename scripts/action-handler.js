@@ -247,6 +247,15 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      */
     #buildSaves(actionType, groupId) {
       if (canvas.tokens.controlled.length > 1) return;
+
+      // Prune dangling saves from actors imported from other systems
+      const savesList = ["evasion", "mental", "physical", "luck", "baseSave"];
+      Object.keys(this.actor.system.saves).forEach((save) => {
+        if (!savesList.includes(save)) {
+          delete this.actor.system.saves[save]
+        };
+      });
+
       const actions = Object.entries(this.actor.system.saves).map((ability) => {
         if (ability[0] === "baseSave") return;
         const abilityId = ability[0]
