@@ -1,6 +1,6 @@
 # Changelog
 
-## New in 1.0.3
+## New in 1.0.5
 
 - Update for v13.
 - Added skills to HUD list.
