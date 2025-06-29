@@ -22,11 +22,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     * @returns {object}
     */
     async #buildCharacterActions() {
-      if (this.actorType === 'character') {
-        // this.#buildAttributes('attribute', 'attributes')
-      }
       this.#buildSaves('save', 'saves')
       this.#buildAbilities('ability', 'abilities')
+      this.#buildSkills('skill', 'skills')
       this.#buildSpells()
       this.#buildArts()
       this.#buildItems()
@@ -303,6 +301,42 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             listName
           })
         }
+      })
+      const groupData = { id: groupId, type: 'system' }
+      this.addActions(actions, groupData)
+    }
+
+    #buildSkills(actionType, groupId) {
+      if (canvas.tokens.controlled.length > 1) return;
+      const skills = this.actor.items.filter(el => el.type == 'skill')
+      // Sort skills by name first, then by secondary property (non-secondary first)
+      skills.sort((a, b) => {
+        if (a.name !== b.name) {
+          return a.name.localeCompare(b.name)
+        }
+        // If names are the same, sort by secondary (false comes before true)
+        return (a.system.secondary ? 1 : 0) - (b.system.secondary ? 1 : 0)
+      })
+      const actions = []
+      skills.forEach((skill) => {
+        const abilityId = skill.id
+        const id = `${actionType}-${skill.id}`
+        const label = skill.name
+        const name = skill.name
+        const listName = `${actionType}${label}`
+        const encodedValue = [actionType, abilityId].join(this.delimiter)
+        const img = skill.img
+        const info1 = { text: skill.system.ownedLevel.toString() }
+        const info2 = { text: skill.system.skillDice ? `(${skill.system.skillDice})` : "", class: 'custominfo' }
+        actions.push({
+          id,
+          name,
+          img,
+          encodedValue,
+          info1,
+          info2,
+          listName
+        })
       })
       const groupData = { id: groupId, type: 'system' }
       this.addActions(actions, groupData)

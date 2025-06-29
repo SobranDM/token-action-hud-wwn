@@ -167,8 +167,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      */
     #rollSkill(event, actor, actionId) {
       if (!actor) return
-      if (!actor.system?.skills) return
-      actor.rollSkill(actionId, { event })
+      const skills = actor.items.filter(el => el.type == 'skill')
+      skills.forEach((skill) => {
+        if (skill.id == actionId) {
+          skill.roll()
+        }
+      })
     }
 
     /**

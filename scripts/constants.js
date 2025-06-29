@@ -24,11 +24,11 @@ export const GROUP = {
   _arts8: { id: 'arts-8', name: 'tokenActionHud.wwn.arts', type: 'system' },
   _arts9: { id: 'arts-9', name: 'tokenActionHud.wwn.arts', type: 'system' },
   _arts10: { id: 'arts-10', name: 'tokenActionHud.wwn.arts', type: 'system' },
-  attributes: { id: 'attributes', name: 'WWN.category.attributes', type: 'system' },
   saves: { id: 'saves', name: 'WWN.category.saves', type: 'system' },
   melee: { id: 'melee', name: 'WWN.items.Melee', type: 'system' },
   ranged: { id: 'ranged', name: 'WWN.items.Range', type: 'system' },
   abilities: { id: 'abilities', name: 'WWN.category.abilities', type: 'system' },
+  skills: { id: 'skills', name: 'WWN.category.skills', type: 'system' },
   armors: { id: 'armor', name: 'WWN.items.Armors', type: 'system' },
   misc: { id: 'misc', name: 'WWN.items.Misc', type: 'system' },
   treasure: { id: 'treasure', name: 'WWN.items.Treasure', type: 'system' }
