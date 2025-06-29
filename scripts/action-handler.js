@@ -62,7 +62,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         const listName = `${actionType}${label}`
         const encodedValue = [actionType, abilityId].join(this.delimiter)
         const img = item.img
-        const info2 = { text: item.system?.damage ? "(" + item[1].system.damage + ")" : "(" + item.system.quantity.value + ")", class: 'custominfo' }
+        const info2 = { text: item.system?.damage ? "(" + item[1].system.damage + ")" : (item[1].system?.quantity?.value ? "(" + item[1].system.quantity.value + ")" : ""), class: 'custominfo' }
         const cssClass = ''
         actions.push({
           id,
@@ -109,7 +109,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
               const listName = `${actionType}${label}`
               const encodedValue = [actionType, abilityId].join(this.delimiter)
               const img = item[1].img
-              const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : "(" + item[1].system.quantity.value + ")", class: 'custominfo' }
+              const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : (item[1].system?.quantity?.value ? "(" + item[1].system.quantity.value + ")" : ""), class: 'custominfo' }
               const cssClass = ''
               return {
                 id,
@@ -146,7 +146,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
               const listName = `${actionType}${label}`
               const encodedValue = [actionType, abilityId].join(this.delimiter)
               const img = item[1].img
-              const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : "(" + item[1].system.quantity.value + ")", class: 'custominfo' }
+              const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : (item[1].system?.quantity?.value ? "(" + item[1].system.quantity.value + ")" : ""), class: 'custominfo' }
               const cssClass = ''
               return {
                 id,
@@ -185,7 +185,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
               const listName = `${actionType}${label}`
               const encodedValue = [actionType, abilityId].join(this.delimiter)
               const img = item[1].img
-              const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : "(" + item[1].system.quantity.value + ")", class: 'custominfo' }
+              const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : (item[1].system?.quantity?.value ? "(" + item[1].system.quantity.value + ")" : ""), class: 'custominfo' }
               const cssClass = ''
               return {
                 id,
@@ -223,7 +223,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const listName = `${actionType}${label}`
             const encodedValue = [actionType, abilityId].join(this.delimiter)
             const img = item[1].img
-            const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : "(" + item[1].system.quantity.value + ")", class: 'custominfo' }
+            const info2 = { text: item[1].system?.damage ? "(" + item[1].system.damage + ")" : (item[1].system?.quantity?.value ? "(" + item[1].system.quantity.value + ")" : ""), class: 'custominfo' }
             const cssClass = ''
             return {
               id,
@@ -342,7 +342,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
               const name = ability[1].name
               const listName = `${actionType}${label}`
               const encodedValue = [actionType, abilityId].join(this.delimiter)
-              const info1 = { text: "( " + ability[1].system.cast + " )" }
+              const info1 = { text: ability[1].system?.cast && ability[1].system.cast > 0 ? "( " + ability[1].system.cast + " )" : "" }
               const img = ability[1].img
               const active = ''
               const cssClass = `toggle${active}`
@@ -392,7 +392,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
               const name = ability[1].name
               const listName = `${actionType}${label}`
               const encodedValue = [actionType, abilityId].join(this.delimiter)
-              const info1 = { text: "( " + ability[1].system.effort + " )" }
+              const info1 = { text: ability[1].system?.effort && ability[1].system.effort > 0 ? "( " + ability[1].system.effort + " )" : "" }
               const img = ability[1].img
               const active = ''
               const cssClass = `toggle${active}`

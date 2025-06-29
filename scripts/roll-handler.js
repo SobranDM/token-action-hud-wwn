@@ -198,7 +198,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
       } else if (item.type == 'art') {
         return item.spendArt();
-      } else if (item.system.quantity.value > 0 && consumeItem) {
+      } else if (item.system?.quantity?.value > 0 && consumeItem) {
         const newData = {
           quantity: {
             value: item.system.quantity.value - quantity
